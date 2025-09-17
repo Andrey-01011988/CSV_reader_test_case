@@ -39,7 +39,7 @@ pytest --cov=.
 
 ### Пример
 ```python
-# your_report.py
+# reports/your_report.py
 class NewReport(BaseReport):
 def generate(self):
 # логика генерации отчета
