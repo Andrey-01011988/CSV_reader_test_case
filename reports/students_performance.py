@@ -1,3 +1,5 @@
+from typing import Dict, Any
+
 from .base_report import BaseReport
 from tabulate import tabulate
 from collections import defaultdict
@@ -6,21 +8,9 @@ from collections import defaultdict
 class StudentPerformanceReport(BaseReport):
     """Отчет о среднем балле студентов"""
 
-    def __init__(self, data):
-        self.data = data
-        self.validate_data()
+    REQUIRED_FIELDS = ["student_name", "grade"]
 
-    def validate_data(self):
-        """Валидация данных"""
-        required_fields = ["student_name", "grade"]
-        for row in self.data:
-            for field in required_fields:
-                if field not in row:
-                    raise ValueError(f"Поле {field} отсутствует в строке {row}")
-                elif not row[field]:
-                    raise ValueError(f"Поле {field} в строке {row} не может быть пустым")
-
-    def calculate_performance(self):
+    def calculate_performance(self) -> list[Dict[str, Any]]:
         """Расчет среднего балла"""
 
         students_grades = defaultdict(list)

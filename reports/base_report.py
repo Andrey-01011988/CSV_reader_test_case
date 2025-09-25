@@ -1,9 +1,27 @@
 from abc import ABC, abstractmethod
 import csv
+from typing import List, Dict, Any
 
 
 class BaseReport(ABC):
     """Базовый класс для отчетов."""
+    REQUIRED_FIELDS: List[str] = []
+
+    def __init__(self, data: List[Dict[str, Any]]) -> None:
+        self.data = data
+        self._validate_data()
+
+    def _validate_data(self) -> None:
+        """Общая валидация данных для всех отчетов"""
+        if not self.REQUIRED_FIELDS:
+            raise NotImplementedError("REQUIRED_FIELDS должен быть определен в дочернем классе")
+
+        for i, row in enumerate(self.data):
+            for field in self.REQUIRED_FIELDS:
+                if field not in row:
+                    raise ValueError(f"Поле '{field}' отсутствует в строке {i + 1}: {row}")
+                elif not str(row[field]).strip():
+                    raise ValueError(f"Поле '{field}' в строке {i + 1} не может быть пустым")
 
     @abstractmethod
     def generate(self):
